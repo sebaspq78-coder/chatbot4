@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiRuta Vivienda - Portal de Consulta Ciudadana y Transparencia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0F172A', // Azul Oscuro de Confianza
+                            teal: '#0F766E', // Verde Azulado de Apoyo
+                            accent: '#B45309', // Ámbar de alto contraste
+                            light: '#F0FDFA',
+                            bg: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts para alta legibilidad -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #F8FAFC;
+        }
+        /* Enfoque accesible visible y contrastado en color Ámbar de acuerdo a WCAG 2.2 */
+        *:focus-visible {
+            outline: 4px solid #B45309 !important;
+            outline-offset: 2px !important;
+        }
+        /* Desactivar cursivas y mayúsculas sostenidas para usuarios con dislexia o dificultades cognitivas */
+        .accessible-text {
+            text-align: left !important;
+            text-transform: none !important;
+            font-style: normal !important;
+        }
+        /* Transiciones suaves */
+        .tab-transition {
+            transition: all 0.2s ease-in-out;
+        }
+        /* Alto contraste personalizado */
+        .high-contrast {
+            background-color: #000000 !important;
+            color: #FFFFFF !important;
+        }
+        .high-contrast * {
+            background-color: #000000 !important;
+            color: #FFFF00 !important;
+            border-color: #FFFF00 !important;
+        }
+        .high-contrast button, .high-contrast a {
+            outline: 2px solid #FFFF00 !important;
+        }
+    </style>
+</head>
+<body class="accessible-text text-slate-800 transition-all duration-300" id="body-element">
+
+    <!-- Saltarse al contenido principal (Accesibilidad Teclado) -->
+    <a href="#contenido-principal" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-brand-accent focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:font-bold focus:z-50">
+        Saltar al contenido principal
+    </a>
+
+    <!-- Barra de Accesibilidad Superior -->
+    <div class="bg-slate-900 text-white py-2 px-4 text-xs flex justify-between items-center" aria-label="Herramientas de accesibilidad">
+        <span class="font-semibold">Plataforma Oficial MiRuta Vivienda — Sitio Web de Transparencia y Consulta</span>
+        <div class="flex gap-4">
+            <button onclick="toggleHighContrast()" class="hover:underline flex items-center gap-1 p-1 min-h-[32px]" aria-label="Cambiar a alto contraste">
+                🌓 Alto Contraste
+            </button>
+            <button onclick="changeFontSize(1)" class="hover:underline flex items-center gap-1 p-1 min-h-[32px]" aria-label="Aumentar tamaño de texto">
+                A+ Texto
+            </button>
+            <button onclick="changeFontSize(-1)" class="hover:underline flex items-center gap-1 p-1 min-h-[32px]" aria-label="Disminuir tamaño de texto">
+                A- Texto
+            </button>
+        </div>
+    </div>
+
+    <!-- Cabecera Institucional (Gob.cl Style) -->
+    <header class="bg-white border-b border-slate-200 py-4 px-6 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-dark p-2 rounded-lg flex items-center justify-center w-12 h-12 shadow" aria-hidden="true">
+                    <!-- Logo oficial MiRuta: casita con ruta -->
+                    <svg class="w-8 h-8 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold leading-none text-brand-dark">MiRuta Vivienda</h1>
+                    <p class="text-xs text-slate-500 mt-1 font-semibold">Portal de Consulta Ciudadana, Transparencia y Orientación Habitacional</p>
+                </div>
+            </div>
+            
+            <nav aria-label="Navegación principal" class="flex flex-wrap gap-1">
+                <a href="#inicio" class="px-4 py-2 rounded-md hover:bg-slate-100 text-sm font-bold text-slate-700 min-h-[44px] flex items-center">Inicio</a>
+                <a href="#noticias" class="px-4 py-2 rounded-md hover:bg-slate-100 text-sm font-bold text-slate-700 min-h-[44px] flex items-center">Noticias</a>
+                <a href="#subsidios" class="px-4 py-2 rounded-md hover:bg-slate-100 text-sm font-bold text-slate-700 min-h-[44px] flex items-center">Subsidios</a>
+                <a href="#asistente-miruta" class="px-4 py-2 rounded-md hover:bg-slate-100 text-sm font-bold text-slate-700 min-h-[44px] flex items-center">MiRuta Web</a>
+                <a href="#mi-postulacion" class="px-4 py-2 rounded-md bg-brand-dark text-white hover:bg-brand-teal text-sm font-bold min-h-[44px] flex items-center shadow-sm">Mi Postulación</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main id="contenido-principal" class="max-w-7xl mx-auto p-4 md:p-8 space-y-12">
+        
+        <!-- SECCIÓN DE INICIO: Hero Contextual -->
+        <section id="inicio" class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-6 md:p-10 shadow-lg flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-1 space-y-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-slate-900 uppercase">
+                    Extensión Web Oficial de la Aplicación
+                </span>
+                <h2 class="text-3xl font-extrabold leading-tight">La ruta a tu hogar, más clara y transparente que nunca</h2>
+                <p class="text-slate-300 text-sm leading-relaxed max-w-2xl">
+                    Bienvenido al portal complementario de **MiRuta Vivienda**. Mientras que nuestra aplicación móvil te asiste en tu celular paso a paso, este sitio web está diseñado para darte mayor visibilidad horizontal, permitiéndote consultar el estado en tiempo real de tus postulaciones, analizar el catálogo completo de subsidios chilenos vigentes en 2026, y diagnosticar tus alternativas de forma integral.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#asistente-miruta" class="px-6 py-3 bg-brand-teal text-white font-bold rounded-lg hover:bg-teal-800 transition shadow min-h-[44px] flex items-center">
+                        Iniciar Clasificación Web
+                    </a>
+                    <a href="#mi-postulacion" class="px-6 py-3 bg-white text-slate-900 font-bold rounded-lg hover:bg-slate-100 transition min-h-[44px] flex items-center">
+                        Revisar Mi Postulación
+                    </a>
+                </div>
+            </div>
+            <div class="w-full md:w-64 bg-slate-800 rounded-xl p-6 border border-slate-700 text-center space-y-3">
+                <p class="text-xs font-bold text-teal-400 uppercase tracking-wider">¿Prefieres usar la App móvil?</p>
+                <div class="bg-white p-3 rounded-xl inline-block">
+                    <!-- Simulación de código QR -->
+                    <div class="w-28 h-28 bg-slate-900 flex items-center justify-center text-white text-xs p-2 text-center font-bold">
+                        CÓDIGO QR <br> MiRuta App
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400">Escanea para descargar la aplicación en tu celular y sincronizar tu diagnóstico.</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: NOTICIAS CURADAS Y REALES -->
+        <section id="noticias" class="space-y-6">
+            <div class="border-b pb-4">
+                <h3 class="text-xl font-bold text-brand-dark flex items-center gap-2">
+                    <span class="p-1.5 bg-teal-50 text-brand-teal rounded-lg">📰</span>
+                    Noticias y Novedades de Subsidios 2026
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">Información oficial, plazos y modificaciones gubernamentales vigentes en Chile.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Noticia 1 -->
+                <article class="bg-white rounded-xl p-5 border border-slate-100 shadow-sm space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <span class="text-slate-400 text-xs font-semibold block">8 de Septiembre, 2026</span>
+                        <h4 class="font-bold text-slate-900 text-base leading-snug">Se abre el llamado especial del Subsidio de Arriendo para Personas Mayores y Personas con Discapacidad</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Este subsidio especial del MINVU no exige ahorro previo, cubre hasta un 90% del costo del arriendo mensual y estará abierto para postulaciones desde hoy 8 de septiembre hasta el 8 de octubre de 2026.
+                        </p>
+                    </div>
+                    <a href="https://www.minvu.gob.cl" target="_blank" class="text-xs font-bold text-brand-teal hover:underline inline-flex items-center min-h-[36px]" aria-label="Conocer más sobre el llamado especial de arriendo 2026">
+                        Conocer más &rarr;
+                    </a>
+                </article>
+
+                <!-- Noticia 2 -->
+                <article class="bg-white rounded-xl p-5 border border-slate-100 shadow-sm space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <span class="text-slate-400 text-xs font-semibold block">8 de Septiembre, 2026</span>
+                        <h4 class="font-bold text-slate-900 text-base leading-snug">Congreso aprueba la Ley de Bono extraordinario de $30.000 por hijo</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            El beneficio será entregado de forma automática por cada integrante de entre 0 y 13 años pertenecientes al 80% más vulnerable según el Registro Social de Hogares.
+                        </p>
+                    </div>
+                    <a href="https://www.chileatiende.gob.cl" target="_blank" class="text-xs font-bold text-brand-teal hover:underline inline-flex items-center min-h-[36px]" aria-label="Conocer más sobre el Bono de 30 mil por hijo">
+                        Conocer más &rarr;
+                    </a>
+                </article>
+
+                <!-- Noticia 3 -->
+                <article class="bg-white rounded-xl p-5 border border-slate-100 shadow-sm space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <span class="text-slate-400 text-xs font-semibold block">2 de Abril, 2026</span>
+                        <h4 class="font-bold text-slate-900 text-base leading-snug">Beneficios tributarios extraordinarios de la Ley 21.631 para nuevos propietarios</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Si compraste tu primera vivienda nueva con crédito hipotecario, recuerda que la Operación Renta permite obtener una rebaja tributaria anual de hasta 16 UTM por concepto de dividendos pagados.
+                        </p>
+                    </div>
+                    <a href="https://www.bcn.cl" target="_blank" class="text-xs font-bold text-brand-teal hover:underline inline-flex items-center min-h-[36px]" aria-label="Conocer más sobre los beneficios de la Ley 21631">
+                        Conocer más &rarr;
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: TARJETAS DE BENEFICIOS HABITACIONALES -->
+        <section id="subsidios" class="space-y-6">
+            <div class="border-b pb-4">
+                <h3 class="text-xl font-bold text-brand-dark flex items-center gap-2">
+                    <span class="p-1.5 bg-teal-50 text-brand-teal rounded-lg">🏠</span>
+                    Catálogo de Subsidios Habitacionales
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">Selecciona y revisa los requisitos técnicos de las principales líneas de postulación del Ministerio de Vivienda.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Tarjeta DS49 -->
+                <div class="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-4 flex flex-col justify-between relative">
+                    <span class="absolute top-4 right-4 bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">VIGENTE</span>
+                    <div class="space-y-2">
+                        <div class="text-3xl">🛡️</div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">DS49 - Fondo Solidario</h4>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Permite la compra o construcción de una vivienda construida de hasta 950 UF sin deuda bancaria. Exclusivo para familias dentro del 40% más vulnerable en el RSH.
+                        </p>
+                    </div>
+                    <button onclick="mostrarDetalleSubsidio('ds49')" class="w-full py-2 bg-slate-50 text-slate-700 hover:bg-brand-dark hover:text-white rounded-lg text-xs font-bold min-h-[38px] transition">
+                        Ver requisitos
+                    </button>
+                </div>
+
+                <!-- Tarjeta DS1 -->
+                <div class="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-4 flex flex-col justify-between relative">
+                    <span class="absolute top-4 right-4 bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full">PRÓXIMO</span>
+                    <div class="space-y-2">
+                        <div class="text-3xl">📈</div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">DS1 - Sectores Medios</h4>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Apoya la adquisición de viviendas de hasta 2.200 UF para familias con ingresos medios que tienen libreta de ahorro y opción de complementar con crédito hipotecario.
+                        </p>
+                    </div>
+                    <button onclick="mostrarDetalleSubsidio('ds1')" class="w-full py-2 bg-slate-50 text-slate-700 hover:bg-brand-dark hover:text-white rounded-lg text-xs font-bold min-h-[38px] transition">
+                        Ver requisitos
+                    </button>
+                </div>
+
+                <!-- Tarjeta DS52 Adulto Mayor -->
+                <div class="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-4 flex flex-col justify-between relative">
+                    <span class="absolute top-4 right-4 bg-orange-100 text-orange-800 text-[10px] font-bold px-2 py-0.5 rounded-full">CIERRE: 8 OCT</span>
+                    <div class="space-y-2">
+                        <div class="text-3xl">👴</div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">DS52 - Arriendo Adulto Mayor</h4>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Subsidio de arriendo especial para personas mayores de 60 años. Cubre hasta el 90% del arriendo mensual y no requiere poseer ahorro previo.
+                        </p>
+                    </div>
+                    <button onclick="mostrarDetalleSubsidio('ds52')" class="w-full py-2 bg-slate-50 text-slate-700 hover:bg-brand-dark hover:text-white rounded-lg text-xs font-bold min-h-[38px] transition">
+                        Ver requisitos
+                    </button>
+                </div>
+
+                <!-- Tarjeta Leasing DS120 -->
+                <div class="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-4 flex flex-col justify-between relative">
+                    <span class="absolute top-4 right-4 bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded-full">AUTOMÁTICO</span>
+                    <div class="space-y-2">
+                        <div class="text-3xl">🔑</div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">DS120 - Leasing Habitacional</h4>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Modelo flexible de arriendo con promesa de compra para propiedades de hasta 2.000 UF. No exige antigüedad de ahorro habitacional mínimo previo.
+                        </p>
+                    </div>
+                    <button onclick="mostrarDetalleSubsidio('ds120')" class="w-full py-2 bg-slate-50 text-slate-700 hover:bg-brand-dark hover:text-white rounded-lg text-xs font-bold min-h-[38px] transition">
+                        Ver requisitos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Dinámico de Requisitos (Sencillo) -->
+            <div id="modal-requisitos" class="hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+                <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+                    <h4 id="modal-titulo" class="text-lg font-bold text-slate-900"></h4>
+                    <div id="modal-contenido" class="text-xs text-slate-600 space-y-3 leading-relaxed"></div>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="cerrarModal()" class="px-5 py-2.5 bg-brand-dark hover:bg-brand-teal text-white rounded-lg font-bold text-xs min-h-[44px]">
+                            Entendido, cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: ASISTENTE DE CLASIFICACIÓN (MIRUTA WEB) -->
+        <section id="asistente-miruta" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div class="border-b pb-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="p-1.5 bg-brand-light text-brand-teal rounded-lg">🎯</span>
+                    Asistente de Clasificación Habitacional Web
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">Si no cuentas con nuestra aplicación instalada, completa nuestro wizard interactivo para conocer tu ruta sugerida.</p>
+            </div>
+
+            <!-- Contenedor del Cuestionario Estructurado -->
+            <div id="contenedor-asistente" class="bg-slate-50 p-6 rounded-2xl border border-slate-200 max-w-3xl mx-auto space-y-6">
+                
+                <!-- Pantalla Inicial -->
+                <div id="pantalla-bienvenida" class="text-center space-y-4 py-6">
+                    <div class="w-16 h-16 bg-brand-dark text-white rounded-full flex items-center justify-center mx-auto text-3xl shadow" aria-hidden="true">
+                        🏡
+                    </div>
+                    <div class="space-y-2">
+                        <h4 class="text-lg font-bold text-slate-800">¿Iniciamos tu evaluación?</h4>
+                        <p class="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                            Este cuestionario confidencial de **8 preguntas** procesará tu perfil localmente para recomendarte las mejores alternativas estatales de vivienda y arriendo según tu puntaje y RSH.
+                        </p>
+                    </div>
+                    <button onclick="iniciarPreguntas()" class="px-8 py-3 bg-brand-teal hover:bg-teal-800 text-white font-bold rounded-lg shadow-md min-h-[44px] text-sm tab-transition">
+                        Sí, Comenzar Clasificación
+                    </button>
+                </div>
+
+                <!-- Pantalla de Preguntas con Radio Buttons Accesibles -->
+                <div id="pantalla-preguntas" class="hidden space-y-6">
+                    <!-- Barra de progreso superior -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs text-slate-500 font-bold">
+                            <span id="numero-pregunta">Pregunta 1 de 8</span>
+                            <span id="porcentaje-completado">12% completado</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
+                            <div id="progreso-relleno" class="bg-brand-teal h-2.5 rounded-full tab-transition" style="width: 12%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro de Pregunta -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm space-y-4">
+                        <h5 id="texto-pregunta" class="font-bold text-slate-800 text-sm md:text-base"></h5>
+                        <fieldset id="contenedor-opciones" class="space-y-3" role="radiogroup" aria-labelledby="texto-pregunta">
+                            <!-- Inyectado dinámicamente mediante JS -->
+                        </fieldset>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-2">
+                        <button id="btn-atras" onclick="preguntaAtras()" class="px-5 py-2 border rounded-md text-xs font-bold text-slate-600 hover:bg-slate-50 min-h-[44px]" disabled>
+                            Atrás
+                        </button>
+                        <button id="btn-siguiente" onclick="preguntaSiguiente()" class="px-6 py-2.5 bg-brand-teal hover:bg-teal-800 text-white rounded-md text-xs font-bold min-h-[44px]">
+                            Siguiente
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pantalla Final Multi-pestaña de Resultados -->
+                <div id="pantalla-resultados" class="hidden space-y-6">
+                    <div class="text-center">
+                        <span class="text-3xl">🎉</span>
+                        <h4 class="text-lg font-bold text-slate-800">Evaluación Completada con Éxito</h4>
+                        <p class="text-xs text-slate-500 mt-1">Datos procesados localmente. Selecciona las pestañas para profundizar en tu plan.</p>
+                    </div>
+
+                    <!-- Pestañas del Prototipo -->
+                    <div class="flex border-b border-slate-200 overflow-x-auto" role="tablist" aria-label="Resultado de preclasificación">
+                        <button id="res-tab-diag" onclick="switchResultTab('diag')" class="py-2.5 px-4 text-xs font-bold border-b-2 border-brand-teal text-brand-teal min-h-[44px] tab-transition" role="tab" aria-selected="true" aria-controls="res-panel-diag">
+                            01 Diagnóstico
+                        </button>
+                        <button id="res-tab-ruta" onclick="switchResultTab('ruta')" class="py-2.5 px-4 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 min-h-[44px] tab-transition" role="tab" aria-selected="false" aria-controls="res-panel-ruta">
+                            02 Mi Ruta
+                        </button>
+                        <button id="res-tab-check" onclick="switchResultTab('check')" class="py-2.5 px-4 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 min-h-[44px] tab-transition" role="tab" aria-selected="false" aria-controls="res-panel-check">
+                            03 Checklist
+                        </button>
+                        <button id="res-tab-perfil" onclick="switchResultTab('perfil')" class="py-2.5 px-4 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 min-h-[44px] tab-transition" role="tab" aria-selected="false" aria-controls="res-panel-perfil">
+                            04 Tu Perfil
+                        </button>
+                    </div>
+
+                    <!-- Panel de Pestaña: Diagnóstico -->
+                    <div id="res-panel-diag" class="space-y-4" role="tabpanel">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-3">
+                            <span class="text-[10px] font-bold text-brand-teal uppercase tracking-wider bg-brand-light px-2 py-0.5 rounded">Recomendación Personalizada</span>
+                            <h5 id="diag-subsidio-titulo" class="text-lg font-bold text-slate-800"></h5>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="font-semibold text-slate-500">Compatibilidad:</span>
+                                <span id="diag-compatibilidad" class="px-2.5 py-0.5 rounded-full font-bold"></span>
+                            </div>
+                            <p id="diag-descripcion" class="text-xs text-slate-600 leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Pestaña: Mi Ruta -->
+                    <div id="res-panel-ruta" class="space-y-4 hidden" role="tabpanel">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-4">
+                            <h5 class="text-sm font-bold text-slate-800">Pasos sugeridos basados en tu perfil</h5>
+                            <div class="space-y-3" id="ruta-lista-pasos">
+                                <!-- Se inyecta según perfil -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Pestaña: Checklist -->
+                    <div id="res-panel-check" class="space-y-4 hidden" role="tabpanel">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-3">
+                            <h5 class="text-sm font-bold text-slate-800">Tareas Críticas de Control Manual</h5>
+                            <p class="text-[11px] text-slate-500">Marca manualmente tus avances reales antes de la postulación oficial.</p>
+                            <div class="space-y-2 pt-1" id="contenedor-checklist">
+                                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded border cursor-pointer min-h-[44px]">
+                                    <input type="checkbox" checked class="w-4 h-4 rounded text-brand-teal focus:ring-brand-teal">
+                                    <span class="text-xs text-slate-700">Comprobar datos ingresados en el Registro Social de Hogares</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded border cursor-pointer min-h-[44px]">
+                                    <input type="checkbox" class="w-4 h-4 rounded text-brand-teal focus:ring-brand-teal">
+                                    <span class="text-xs text-slate-700">Verificar que la cédula de identidad no esté vencida ni en trámite</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded border cursor-pointer min-h-[44px]">
+                                    <input type="checkbox" class="w-4 h-4 rounded text-brand-teal focus:ring-brand-teal">
+                                    <span class="text-xs text-slate-700">Apertura de cuenta de ahorro para la vivienda con 12 meses de antigüedad mínima</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Pestaña: Tu Perfil -->
+                    <div id="res-panel-perfil" class="space-y-4 hidden" role="tabpanel">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-3">
+                            <h5 class="text-sm font-bold text-slate-800">Tus Respuestas Registradas</h5>
+                            <div class="border rounded-lg overflow-hidden text-xs">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-100 text-slate-700">
+                                            <th class="p-2 border-b">Concepto</th>
+                                            <th class="p-2 border-b">Tus Datos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-perfil-filas">
+                                        <!-- Inyectado dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <button onclick="reiniciarAsistente()" class="px-4 py-2 border rounded text-xs font-semibold text-slate-600 hover:bg-slate-50 min-h-[44px]">
+                            Reiniciar Cuestionario
+                        </button>
+                        <a href="https://www.minvu.gob.cl" target="_blank" class="px-5 py-2.5 bg-brand-teal text-white rounded text-xs font-bold hover:bg-teal-800 min-h-[44px] flex items-center" aria-label="Ir al portal oficial del MINVU para postulación">
+                            Postular en Portal Oficial &rarr;
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: ESTADO DE POSTULACIÓN EN TIEMPO REAL -->
+        <section id="mi-postulacion" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div class="border-b pb-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="p-1.5 bg-brand-light text-brand-teal rounded-lg">📋</span>
+                    Mis Postulaciones Activas (Consulta en Escritorio)
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">Ingresa tu RUT para consultar el progreso, etapas y plazos de resolución oficiales.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Formulario de Consulta -->
+                <div class="md:col-span-1 bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
+                    <h4 class="font-bold text-sm text-slate-700">Panel de Acceso Único</h4>
+                    <div>
+                        <label for="rut-consulta" class="block text-xs font-semibold text-slate-600 mb-1">RUT del Solicitante:</label>
+                        <input type="text" id="rut-consulta" placeholder="Ej: 12.345.678-9" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-brand-teal focus:border-brand-teal text-sm min-h-[44px]">
+                        <p class="text-[11px] text-slate-400 mt-1">Cualquier RUT ingresado simulará una consulta real de base de datos.</p>
+                    </div>
+                    <button onclick="consultarPostulacion()" class="w-full bg-brand-dark text-white py-2 rounded-md hover:bg-brand-teal font-bold text-sm min-h-[44px]">
+                        Consultar Estatus
+                    </button>
+                </div>
+
+                <!-- Panel de Resultados Dinámicos (Tabla de Seguimiento) -->
+                <div id="panel-estado-resultados" class="md:col-span-2 flex items-center justify-center p-6 border-2 border-dashed border-slate-200 rounded-xl bg-white text-center">
+                    <div class="space-y-2">
+                        <span class="text-3xl">🔍</span>
+                        <p class="font-bold text-slate-600 text-sm">Aún no has realizado una consulta.</p>
+                        <p class="text-xs text-slate-400">Ingresa tu RUT en el panel izquierdo para desplegar tu tabla de estatus en tiempo real.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER COMPLETO Y INSTITUCIONAL -->
+    <footer class="bg-slate-900 text-slate-300 py-10 px-6 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="bg-white p-1 rounded-full w-8 h-8 flex items-center justify-center text-slate-900 font-bold text-sm">🏡</div>
+                    <span class="text-lg font-bold text-white">MiRuta Vivienda</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Ecosistema digital de orientación, transparencia y simplificación de trámites habitacionales en Chile. Integración directa entre web y aplicaciones móviles.
+                </p>
+            </div>
+            
+            <div class="space-y-3">
+                <h5 class="text-sm font-bold text-white uppercase tracking-wider">Contacto Oficial</h5>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li>📍 Providencia 727, Oficina 301, Metropolitana, Chile</li>
+                    <li>📞 +56 2 2594 0322</li>
+                    <li>✉️ contacto@mirutavivienda.cl</li>
+                </ul>
+            </div>
+
+            <div class="space-y-3">
+                <h5 class="text-sm font-bold text-white uppercase tracking-wider">Enlaces de Interés</h5>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li><a href="https://registrosocial.gob.cl" target="_blank" class="hover:underline">Registro Social de Hogares</a></li>
+                    <li><a href="https://www.chileatiende.gob.cl" target="_blank" class="hover:underline">ChileAtiende</a></li>
+                    <li><a href="https://www.minvu.gob.cl" target="_blank" class="hover:underline">MINVU</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-3 flex flex-col justify-between">
+                <div>
+                    <h5 class="text-sm font-bold text-white uppercase tracking-wider">Redes Oficiales</h5>
+                    <div class="flex gap-3 pt-2">
+                        <span class="text-xs bg-slate-800 p-2 rounded hover:text-white cursor-pointer" title="Facebook">FB</span>
+                        <span class="text-xs bg-slate-800 p-2 rounded hover:text-white cursor-pointer" title="Instagram">IG</span>
+                        <span class="text-xs bg-slate-800 p-2 rounded hover:text-white cursor-pointer" title="YouTube">YT</span>
+                    </div>
+                </div>
+                <div class="pt-4 flex gap-2 items-center">
+                    <span class="text-[10px] font-semibold text-slate-500 uppercase border border-slate-700 px-2 py-1 rounded">Sitio Seguro</span>
+                    <span class="text-[10px] font-semibold text-slate-500 uppercase border border-slate-700 px-2 py-1 rounded">WCAG 2.2 AA</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto text-center text-xs text-slate-500 pt-8 mt-8 border-t border-slate-800">
+            &copy; 2026 MiRuta Vivienda — Todos los derechos reservados. Portal Ciudadano complementario de libre acceso.
+        </div>
+    </footer>
+
+    <!-- CHATBOT INTEGRADO FLOTANTE (ESQUINA INFERIOR DERECHA) -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <!-- Burbuja de Chat -->
+        <div id="chat-popup" class="hidden w-80 md:w-96 h-[450px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden mb-4">
+            <!-- Encabezado Chat -->
+            <div class="bg-brand-dark text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-white p-1 rounded-full text-brand-dark font-bold text-xs">💬</div>
+                    <div>
+                        <h4 class="font-bold text-xs leading-none">MiRuta Vivienda - Asistente</h4>
+                        <span class="text-[10px] text-teal-200">En línea &bull; Accesible</span>
+                    </div>
+                </div>
+                <button onclick="toggleChatPopup()" class="text-white hover:text-amber-500 font-bold text-lg p-1 min-h-[32px] min-w-[32px]" aria-label="Cerrar asistente de chat">✕</button>
+            </div>
+            
+            <!-- Historial Mensajes (aria-live="polite") -->
+            <div id="chat-mensajes" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 text-xs" aria-live="polite">
+                <!-- Mensaje de bienvenida -->
+                <div class="flex gap-2 items-start max-w-[85%]">
+                    <div class="bg-brand-teal text-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-[10px]" aria-hidden="true">MR</div>
+                    <div class="bg-white p-2.5 rounded-lg shadow-sm border border-slate-100 text-slate-700">
+                        <p class="font-bold mb-1">¡Hola! Bienvenid@ a MiRuta Vivienda.</p>
+                        <p class="leading-relaxed">¿En qué puedo ayudarte hoy? Selecciona una de estas opciones rápidas o escribe tu duda en la caja de abajo:</p>
+                        <div class="mt-2 space-y-1">
+                            <button onclick="enviarChatOpcion('¿Cómo funciona el DS49?')" class="w-full text-left p-1.5 bg-slate-100 hover:bg-brand-dark hover:text-white rounded font-bold text-[10px]">¿Cómo funciona el DS49?</button>
+                            <button onclick="enviarChatOpcion('Requisitos de Subsidio de Arriendo')" class="w-full text-left p-1.5 bg-slate-100 hover:bg-brand-dark hover:text-white rounded font-bold text-[10px]">Requisitos de Subsidio de Arriendo</button>
+                            <button onclick="enviarChatOpcion('¿Qué es el RSH?')" class="w-full text-left p-1.5 bg-slate-100 hover:bg-brand-dark hover:text-white rounded font-bold text-[10px]">¿Qué es el RSH?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entrada de Texto -->
+            <div class="p-3 border-t bg-white flex gap-2">
+                <input type="text" id="chat-input" placeholder="Escribe tu consulta aquí..." class="flex-1 border rounded-md px-3 py-2 text-xs focus:ring-2 focus:ring-brand-teal focus:border-brand-teal min-h-[38px]" aria-label="Texto de tu consulta al asistente">
+                <button onclick="enviarMensajeChat()" class="px-4 bg-brand-dark hover:bg-brand-teal text-white font-bold rounded-md text-xs min-h-[38px]">
+                    Enviar
+                </button>
+            </div>
+        </div>
+
+        <!-- Botón Flotante -->
+        <button onclick="toggleChatPopup()" class="w-14 h-14 bg-brand-teal text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-teal-800 transition min-h-[56px] min-w-[56px] border-2 border-white" aria-label="Abrir asistente de chat">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- JAVASCRIPT DE LÓGICA INTERACTIVA -->
+    <script>
+        // --- 1. ACCESIBILIDAD ---
+        function toggleHighContrast() {
+            document.getElementById('body-element').classList.toggle('high-contrast');
+        }
+
+        let currentScale = 1;
+        function changeFontSize(direction) {
+            currentScale += direction * 0.1;
+            if (currentScale < 0.8) currentScale = 0.8;
+            if (currentScale > 1.8) currentScale = 1.8;
+            document.getElementById('body-element').style.fontSize = `${currentScale}em`;
+        }
+
+        // --- 2. MODAL REQUISITOS ---
+        const infoSubsidios = {
+            ds49: {
+                titulo: "Fondo Solidario de Elección de Vivienda (DS49)",
+                contenido: `<p><strong>Dirigido a:</strong> Familias en situación de vulnerabilidad social sin vivienda propia ni capacidad de endeudamiento hipotecario.</p>
+                            <p class='mt-2'><strong>Requisitos Legales:</strong></p>
+                            <ul class='list-disc pl-4 mt-1 space-y-1'>
+                                <li>Edad mínima: 18 años con cédula de identidad nacional vigente.</li>
+                                <li>Registro Social de Hogares: Pertenecer al tramo del <strong>40% más vulnerable</strong>.</li>
+                                <li>Ahorro mínimo: <strong>10 UF</strong> (depositado en la cuenta de ahorro habitacional a más tardar el último día hábil del mes anterior a la postulación).</li>
+                                <li>Inhabilidades: Ningún integrante del hogar puede poseer propiedades previas.</li>
+                            </ul>
+                            <p class='mt-2 text-amber-700 font-bold'>Estrategia Social: Postular con el ahorro mínimo casi nunca es suficiente. Luis Navarro (Asistente Social) sugiere sobreahorro para aumentar el puntaje en la evaluación oficial.</p>`
+            },
+            ds1: {
+                titulo: "Subsidio de Sectores Medios (DS1)",
+                contenido: `<p><strong>Dirigido a:</strong> Familias sin vivienda propia pero con ingresos medios y capacidad de ahorro para adquirir viviendas nuevas, usadas o construir.</p>
+                            <p class='mt-2'><strong>Características de los Tramos (MINVU 2026):</strong></p>
+                            <ul class='list-disc pl-4 mt-1 space-y-1'>
+                                <li><strong>Tramo 1:</strong> RSH máximo hasta el <strong>60%</strong>. Ahorro mínimo: <strong>30 UF</strong>. Para viviendas de hasta 1.100 UF o 1.200 UF (zonas extremas).</li>
+                                <li><strong>Tramo 2:</strong> RSH máximo hasta el <strong>80%</strong>. Ahorro mínimo: <strong>40 UF</strong>. Para viviendas de hasta 1.600 UF o 1.800 UF.</li>
+                                <li><strong>Tramo 3:</strong> RSH máximo hasta el <strong>90%</strong> (o sin límite en llamados específicos). Ahorro mínimo: <strong>80 UF</strong>. Para viviendas de hasta 2.200 UF.</li>
+                            </ul>
+                            <p class='mt-2'><strong>Nota de Ley:</strong> Admite complementar con crédito hipotecario o el beneficio extraordinario de la Ley 21.631 si se adquirió una vivienda nueva.</p>`
+            },
+            ds52: {
+                titulo: "Subsidio de Arriendo Especial Adulto Mayor",
+                contenido: `<p><strong>Dirigido a:</strong> Personas mayores de 60 años con tramo socioeconómico de vulnerabilidad regular.</p>
+                            <p class='mt-2'><strong>Condiciones Excepcionales 2026:</strong></p>
+                            <ul class='list-disc pl-4 mt-1 space-y-1'>
+                                <li><strong>No exige ahorro previo mínimo</strong> (a diferencia de las 4 UF del llamado regular).</li>
+                                <li>Cubre entre el <strong>70% y el 90%</strong> del arriendo de una vivienda seleccionada.</li>
+                                <li>RSH admitido: hasta el <strong>70% de vulnerabilidad</strong>.</li>
+                                <li>Edad: 60 años o más cumplidos al momento de postular.</li>
+                            </ul>
+                            <p class='mt-2 text-teal-800 font-bold'>Fecha de llamado especial: Del 8 de Septiembre al 8 de Octubre de 2026.</p>`
+            },
+            ds120: {
+                titulo: "Leasing Habitacional (DS120)",
+                contenido: `<p><strong>Dirigido a:</strong> Personas que no tienen ahorro previo consolidado pero que poseen ingresos mensuales regulares suficientes para pagar dividendos o cuotas mensuales de arriendo.</p>
+                            <p class='mt-2'><strong>Ventajas Clave:</strong></p>
+                            <ul class='list-disc pl-4 mt-1 space-y-1'>
+                                <li><strong>Sin antigüedad de ahorro:</strong> Ideal para quienes necesitan inmediatez de compra sin haber tenido una libreta por 12 meses.</li>
+                                <li><strong>Subsidio DS120 Automático:</strong> El Estado otorga el subsidio directamente si cumples los requisitos de perfil, reduciendo permanentemente tu cuota mensual.</li>
+                                <li>Precios máximos de propiedad: hasta 2.000 UF (o 2.200 UF en regiones extremas).</li>
+                            </ul>`
+            }
+        };
+
+        function mostrarDetalleSubsidio(slug) {
+            const data = infoSubsidios[slug];
+            if (data) {
+                document.getElementById('modal-titulo').innerText = data.titulo;
+                document.getElementById('modal-contenido').innerHTML = data.contenido;
+                document.getElementById('modal-requisitos').classList.remove('hidden');
+                document.getElementById('modal-requisitos').focus();
+            }
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-requisitos').classList.add('hidden');
+        }
+
+        // --- 3. WIZARD DE CLASIFICACIÓN (MIRUTA WEB) ---
+        const preguntas = [
+            {
+                id: "edad",
+                texto: "1. ¿Cuál es tu rango de edad actual?",
+                opciones: [
+                    { texto: "18 a 29 años", valor: "18-29" },
+                    { texto: "30 a 44 años", valor: "30-44" },
+                    { texto: "45 a 59 años", valor: "45-59" },
+                    { texto: "60 años o más", valor: "60+" }
+                ]
+            },
+            {
+                id: "situacion",
+                texto: "2. ¿Cuál es tu situación habitacional actual?",
+                opciones: [
+                    { texto: "Arriendo una propiedad", valor: "arriendo" },
+                    { texto: "Vivo de allegado o allegada", valor: "allegado" },
+                    { texto: "Pago dividendo hipotecario activo", valor: "dividendo" },
+                    { texto: "Buscando mi primera vivienda propia", valor: "primera" }
+                ]
+            },
+            {
+                id: "personas",
+                texto: "3. ¿Cuántas personas forman parte de tu hogar (comparten el gasto de alimentación)?",
+                opciones: [
+                    { texto: "Vivo solo o sola (unipersonal)", valor: "unipersonal" },
+                    { texto: "2 personas en total", valor: "2-personas" },
+                    { texto: "3 a 4 personas", valor: "3-4-personas" },
+                    { texto: "5 personas o más", valor: "5-mas" }
+                ]
+            },
+            {
+                id: "rsh",
+                texto: "4. ¿En qué tramo del Registro Social de Hogares (RSH) te encuentras calificado?",
+                opciones: [
+                    { texto: "Tramo del 0 al 40% (Máxima Vulnerabilidad)", valor: "0-40" },
+                    { texto: "Tramo del 41% al 60%", valor: "41-60" },
+                    { texto: "Tramo del 61% al 70%", valor: "61-70" },
+                    { texto: "Tramo del 71% al 80%", valor: "71-80" },
+                    { texto: "Tramo del 81% al 90%", valor: "81-90" },
+                    { texto: "Tramo del 91% al 100% (Altos Ingresos)", valor: "91-100" },
+                    { texto: "No poseo RSH o no estoy inscrito", valor: "sin-rsh" }
+                ]
+            },
+            {
+                id: "ingresos",
+                texto: "5. ¿Cuál es el ingreso mensual total estimado de tu hogar?",
+                opciones: [
+                    { texto: "Menos de $500.000", valor: "bajo" },
+                    { texto: "Entre $500.000 y $900.000", valor: "medio-bajo" },
+                    { texto: "Entre $900.001 y $1.500.000", valor: "medio-alto" },
+                    { texto: "Más de $1.500.000", valor: "alto" }
+                ]
+            },
+            {
+                id: "ahorro",
+                texto: "6. ¿Cuál es tu nivel de ahorro acumulado aproximado en UF para la vivienda?",
+                opciones: [
+                    { texto: "No poseo ahorro actualmente", valor: "0" },
+                    { texto: "Menos de 4 UF", valor: "menor-4" },
+                    { texto: "Entre 4 y 9 UF", valor: "4-9" },
+                    { texto: "Entre 10 y 29 UF", valor: "10-29" },
+                    { texto: "Entre 30 y 39 UF", valor: "30-39" },
+                    { texto: "Entre 40 y 79 UF", valor: "40-79" },
+                    { texto: "80 UF o más", valor: "80-mas" }
+                ]
+            },
+            {
+                id: "propiedad",
+                texto: "7. ¿Algún miembro del hogar inscrito en tu RSH posee otra vivienda propia?",
+                opciones: [
+                    { texto: "No, nadie posee propiedades habitacionales", valor: "no" },
+                    { texto: "Sí, poseemos una vivienda propia", valor: "si" }
+                ]
+            },
+            {
+                id: "objetivo",
+                texto: "8. ¿Cuál es tu principal objetivo habitacional hoy en día?",
+                opciones: [
+                    { texto: "Comprar mi primera vivienda nueva o usada", valor: "comprar" },
+                    { texto: "Obtener apoyo monetario mensual para arrendar", valor: "arrendar" },
+                    { texto: "Construir en sitio propio o terreno", valor: "construir" },
+                    { texto: "Realizar una mejora o ampliación de mi vivienda actual", valor: "mejorar" }
+                ]
+            }
+        ];
+
+        let indexPreguntaActual = 0;
+        let respuestasUsuario = {};
+
+        function iniciarPreguntas() {
+            document.getElementById('pantalla-bienvenida').classList.add('hidden');
+            document.getElementById('pantalla-preguntas').classList.remove('hidden');
+            mostrarPregunta();
+        }
+
+        function mostrarPregunta() {
+            const preg = preguntas[indexPreguntaActual];
+            document.getElementById('texto-pregunta').innerText = preg.texto;
+            document.getElementById('numero-pregunta').innerText = `Pregunta ${indexPreguntaActual + 1} de 8`;
+            
+            const pct = Math.round(((indexPreguntaActual) / 8) * 100);
+            document.getElementById('porcentaje-completado').innerText = `${pct}% completado`;
+            document.getElementById('progreso-relleno').style.width = `${pct}%`;
+
+            const container = document.getElementById('contenedor-opciones');
+            container.innerHTML = "";
+
+            preg.opciones.forEach((opcion, idx) => {
+                const uniqueId = `opt-${preg.id}-${idx}`;
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-3 p-3 bg-slate-50 border rounded-lg hover:bg-slate-100 cursor-pointer min-h-[44px]";
+                
+                const isChecked = respuestasUsuario[preg.id] === opcion.valor ? "checked" : "";
+                
+                div.innerHTML = `
+                    <input type="radio" id="${uniqueId}" name="preg-${preg.id}" value="${opcion.valor}" ${isChecked} class="w-4 h-4 text-brand-teal focus:ring-brand-teal" onclick="guardarRespuesta('${preg.id}', '${opcion.valor}')">
+                    <label for="${uniqueId}" class="text-xs font-semibold text-slate-700 w-full cursor-pointer">${opcion.texto}</label>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById('btn-atras').disabled = indexPreguntaActual === 0;
+            if (indexPreguntaActual === 7) {
+                document.getElementById('btn-siguiente').innerText = "Ver Diagnóstico";
+            } else {
+                document.getElementById('btn-siguiente').innerText = "Siguiente";
+            }
+        }
+
+        function guardarRespuesta(clave, valor) {
+            respuestasUsuario[clave] = valor;
+        }
+
+        function preguntaAtras() {
+            if (indexPreguntaActual > 0) {
+                indexPreguntaActual--;
+                mostrarPregunta();
+            }
+        }
+
+        function preguntaSiguiente() {
+            // Verificar si respondió la pregunta actual
+            const preg = preguntas[indexPreguntaActual];
+            if (!respuestasUsuario[preg.id]) {
+                alert("Por favor, selecciona una opción para avanzar.");
+                return;
+            }
+
+            if (indexPreguntaActual < 7) {
+                indexPreguntaActual++;
+                mostrarPregunta();
+            } else {
+                evaluarYMostrarResultados();
+            }
+        }
+
+        function evaluarYMostrarResultados() {
+            document.getElementById('pantalla-preguntas').classList.add('hidden');
+            document.getElementById('pantalla-resultados').classList.remove('hidden');
+
+            // Lógica de recomendación habitacional
+            let subsidio = "";
+            let compatibilidad = "Alta";
+            let desc = "";
+            let colorCompat = "bg-emerald-100 text-emerald-800";
+            let pasos = [];
+
+            const ed = respuestasUsuario.edad;
+            const obj = respuestasUsuario.objetivo;
+            const rsh = respuestasUsuario.rsh;
+            const prop = respuestasUsuario.propiedad;
+            const ah = respuestasUsuario.ahorro;
+
+            if (prop === "si") {
+                subsidio = "Subsidio de Mejoramiento de Vivienda y Entidades Patrocinantes";
+                compatibilidad = "Alta";
+                colorCompat = "bg-emerald-100 text-emerald-800";
+                desc = "Dado que ya posees una vivienda propia en tu núcleo familiar, la normativa de postulación a adquisición habitacional te inhabilita temporalmente. Sin embargo, calificas de forma óptima para subsidios de eficiencia energética, cambio de techumbre o mejoramiento térmico.";
+                pasos = [
+                    "Acredita la propiedad con el Certificado de Dominio Vigente.",
+                    "Contacta con una Entidad Patrocinante registrada ante el SERVIU para formular tu proyecto técnico.",
+                    "Alcanza el ahorro mínimo de mejoramiento (comúnmente entre 3 y 5 UF)."
+                ];
+            } else if (obj === "arrendar" && ed === "60+") {
+                subsidio = "Subsidio de Arriendo Especial Adulto Mayor (DS52 Especial)";
+                compatibilidad = "Excelente";
+                colorCompat = "bg-teal-100 text-brand-teal";
+                desc = "Calificas para el llamado especial de arriendo para personas mayores de 60 años. Este beneficio cubre hasta el 90% del valor del arriendo, y tiene la gran ventaja de no exigir ningún tipo de ahorro previo mínimo.";
+                pasos = [
+                    "Asegura que tu Registro Social de Hogares esté actualizado y no supere el tramo del 70%.",
+                    "Ingresa tu postulación en el portal de Serviu entre el 8 de septiembre y el 8 de octubre de 2026.",
+                    "Reúne los antecedentes de la vivienda que deseas arrendar (debe contar con recepción final)."
+                ];
+            } else if (obj === "arrendar") {
+                subsidio = "Subsidio de Arriendo Regular (DS52)";
+                if (ah === "0" || ah === "menor-4") {
+                    compatibilidad = "Media (Ahorro pendiente)";
+                    colorCompat = "bg-amber-100 text-amber-800";
+                    desc = "Tu perfil coincide con el Subsidio de Arriendo DS52. Sin embargo, para poder postular con éxito requieres contar con un ahorro mínimo consolidado de 4 UF depositado en tu libreta habitacional.";
+                } else {
+                    compatibilidad = "Alta";
+                    colorCompat = "bg-emerald-100 text-emerald-800";
+                    desc = "Tienes el ahorro y el RSH alineados para el Subsidio de Arriendo DS52. Este aporte te permitirá cofinanciar temporalmente tu arriendo y seguir ahorrando para adquirir una vivienda.";
+                }
+                pasos = [
+                    "Mantén tu cuenta de ahorro con al menos 4 UF.",
+                    "Verifica que tu tramo socioeconómico del RSH no supere el 70%.",
+                    "Revisa el calendario oficial para el próximo llamado regular."
+                ];
+            } else if (rsh === "0-40" && (ah === "10-29" || ah === "30-39" || ah === "40-79" || ah === "80-mas")) {
+                subsidio = "Fondo Solidario de Elección de Vivienda (DS49)";
+                compatibilidad = "Alta";
+                colorCompat = "bg-emerald-100 text-emerald-800";
+                desc = "Posees el tramo socioeconómico óptimo (40% más vulnerable) y superas el ahorro mínimo legal exigido de 10 UF. Puedes postular de forma individual (si cumples excepciones) o colectiva a través de un Comité de Vivienda.";
+                pasos = [
+                    "Asegura la vigencia de tu cuenta de ahorro.",
+                    "Busca un Comité de Vivienda activo o una Entidad Patrocinante si decides postular a construcción en sitio propio.",
+                    "Considera mantener un sobreahorro estratégico para acumular más puntaje en la selección oficial."
+                ];
+            } else if (rsh === "0-40") {
+                subsidio = "Fondo Solidario de Elección de Vivienda (DS49)";
+                compatibilidad = "Media (Ahorro faltante)";
+                colorCompat = "bg-amber-100 text-amber-800";
+                desc = "Tu vulnerabilidad del 40% del RSH es idónea para el DS49. No obstante, necesitas depositar en tu libreta un mínimo legal de 10 UF antes de que abra el llamado correspondiente.";
+                pasos = [
+                    "Deposita de inmediato en tu cuenta de ahorro habitacional hasta alcanzar las 10 UF exigidas.",
+                    "Acredita tu núcleo familiar o verifica si cuentas con excepciones para postular de forma unipersonal (discapacidad o tercera edad).",
+                    "Comprueba que tus datos en el RSH estén al día."
+                ];
+            } else {
+                subsidio = "Subsidio de Sectores Medios (DS1)";
+                compatibilidad = "Alta";
+                colorCompat = "bg-emerald-100 text-emerald-800";
+                desc = "Calificas óptimamente para el subsidio de Sectores Medios DS1. Según tus respuestas, podrás acogerte a los Tramos 1 o 2 para complementar con un crédito hipotecario o financiamiento tributario de la Ley 21.631.";
+                pasos = [
+                    "Revisa que tu antigüedad de cuenta de ahorro supere los 12 meses.",
+                    "Mantén el saldo de ahorro depositado en fechas clave (normalmente 30 o 40 UF según tramo).",
+                    "Solicita una preaprobación de crédito hipotecario en tu banco de confianza si requieres financiamiento adicional."
+                ];
+            }
+
+            document.getElementById('diag-subsidio-titulo').innerText = subsidio;
+            document.getElementById('diag-compatibilidad').innerText = compatibilidad;
+            document.getElementById('diag-compatibilidad').className = `px-2.5 py-0.5 rounded-full font-bold ${colorCompat}`;
+            document.getElementById('diag-descripcion').innerText = desc;
+
+            // Inyectar pasos
+            const pasosContainer = document.getElementById('ruta-lista-pasos');
+            pasosContainer.innerHTML = "";
+            pasos.forEach((paso, index) => {
+                const div = document.createElement('div');
+                div.className = "flex items-start gap-3";
+                div.innerHTML = `
+                    <span class="w-6 h-6 rounded-full bg-brand-teal text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">${index + 1}</span>
+                    <div>
+                        <p class="text-xs font-bold text-slate-800">${paso}</p>
+                    </div>
+                `;
+                pasosContainer.appendChild(div);
+            });
+
+            // Inyectar resumen de perfil
+            const perfilContainer = document.getElementById('tabla-perfil-filas');
+            perfilContainer.innerHTML = "";
+            preguntas.forEach(preg => {
+                const ansVal = respuestasUsuario[preg.id];
+                const opt = preg.opciones.find(o => o.valor === ansVal);
+                const ansTexto = opt ? opt.texto : "No respondido";
+                
+                const tr = document.createElement('tr');
+                tr.className = "border-b text-slate-600 hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="p-2 font-bold">${preg.texto.substring(3)}</td>
+                    <td class="p-2">${ansTexto}</td>
+                `;
+                perfilContainer.appendChild(tr);
+            });
+        }
+
+        function switchResultTab(tabId) {
+            const tabs = ['diag', 'ruta', 'check', 'perfil'];
+            tabs.forEach(t => {
+                document.getElementById(`res-tab-${t}`).className = "py-2.5 px-4 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 min-h-[44px] tab-transition";
+                document.getElementById(`res-panel-${t}`).classList.add('hidden');
+            });
+            document.getElementById(`res-tab-${tabId}`).className = "py-2.5 px-4 text-xs font-bold border-b-2 border-brand-teal text-brand-teal min-h-[44px] tab-transition";
+            document.getElementById(`res-panel-${tabId}`).classList.remove('hidden');
+        }
+
+        function reiniciarAsistente() {
+            indexPreguntaActual = 0;
+            respuestasUsuario = {};
+            document.getElementById('pantalla-resultados').classList.add('hidden');
+            document.getElementById('pantalla-bienvenida').classList.remove('hidden');
+        }
+
+        // --- 4. CONSULTA DE ESTADO DE POSTULACIÓN ---
+        function consultarPostulacion() {
+            const rut = document.getElementById('rut-consulta').value.trim();
+            if (!rut) {
+                alert("Por favor, ingresa tu RUT para verificar.");
+                return;
+            }
+
+            const container = document.getElementById('panel-estado-resultados');
+            container.className = "md:col-span-2 bg-white border border-slate-200 rounded-xl p-6 text-left space-y-6";
+            container.innerHTML = `
+                <div class="flex justify-between items-center border-b pb-4">
+                    <div>
+                        <h4 class="font-bold text-base text-slate-900">Historial de Trámite: MiRuta Activa</h4>
+                        <p class="text-[11px] text-slate-500">RUT consultado: ${rut} &bull; Sincronizado con SERVIU</p>
+                    </div>
+                    <span class="px-2.5 py-1 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full">EN EVALUACIÓN</span>
+                </div>
+
+                <div class="space-y-4">
+                    <h5 class="text-xs font-bold text-slate-700 uppercase">Progreso del Expediente</h5>
+                    <div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-1 before:bottom-1 before:w-0.5 before:bg-slate-200">
+                        <!-- Paso 1 -->
+                        <div class="relative">
+                            <span class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white flex items-center justify-center text-[10px] text-white">✔</span>
+                            <div class="text-xs">
+                                <p class="font-bold text-slate-800">Inscripción al Registro Social de Hogares</p>
+                                <p class="text-[11px] text-slate-500">Completada con éxito (Cartola Hogar visada en registrosocial.gob.cl).</p>
+                            </div>
+                        </div>
+                        <!-- Paso 2 -->
+                        <div class="relative">
+                            <span class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white flex items-center justify-center text-[10px] text-white">✔</span>
+                            <div class="text-xs">
+                                <p class="font-bold text-slate-800">Verificación de Ahorro y Antigüedad de Cuenta</p>
+                                <p class="text-[11px] text-slate-500">Revisión bancaria aprobada (mínimo de UF acreditado en libreta habitacional).</p>
+                            </div>
+                        </div>
+                        <!-- Paso 3 -->
+                        <div class="relative">
+                            <span class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-amber-500 border-2 border-white flex items-center justify-center text-[10px] text-white">⏳</span>
+                            <div class="text-xs">
+                                <p class="font-bold text-slate-800">Evaluación de Antecedentes e Inhabilidades</p>
+                                <p class="text-[11px] text-slate-500">En curso por el Departamento de Estratificación. <strong>Resolución estimada: 20 de Octubre de 2026</strong>.</p>
+                            </div>
+                        </div>
+                        <!-- Paso 4 -->
+                        <div class="relative opacity-50">
+                            <span class="absolute -left-6 top-0 w-4 h-4 rounded-full bg-slate-300 border-2 border-white flex items-center justify-center text-[10px] text-white"></span>
+                            <div class="text-xs">
+                                <p class="font-bold text-slate-400">Asignación y Publicación de Nómina de Selección</p>
+                                <p class="text-[11px] text-slate-400">Pendiente de resultados de la evaluación técnica.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- 5. CHATBOT FLOTANTE ---
+        function toggleChatPopup() {
+            document.getElementById('chat-popup').classList.toggle('hidden');
+        }
+
+        function enviarChatOpcion(texto) {
+            insertarMensajeUsuario(texto);
+            // Simular respuesta del bot
+            setTimeout(() => {
+                let respuesta = "";
+                if (texto.includes("DS49")) {
+                    respuesta = "El <strong>Subsidio Fondo Solidario DS49</strong> permite comprar una casa o departamento construido sin deuda hipotecaria. Debes pertenecer al 40% del RSH y poseer un ahorro mínimo de 10 UF en tu cuenta habitacional.";
+                } else if (texto.includes("Arriendo")) {
+                    respuesta = "El <strong>Subsidio de Arriendo DS52</strong> entrega un cofinanciamiento de arriendo mensual. El llamado especial Adultos Mayores está abierto del 8 de septiembre al 8 de octubre de 2026, sin exigir ahorro previo.";
+                } else {
+                    respuesta = "El <strong>Registro Social de Hogares (RSH)</strong> es la base oficial que determina tu vulnerabilidad. Puedes descargar tu Cartola Hogar en registrosocial.gob.cl usando tu ClaveÚnica.";
+                }
+                insertarMensajeBot(respuesta);
+            }, 800);
+        }
+
+        function enviarMensajeChat() {
+            const input = document.getElementById('chat-input');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            insertarMensajeUsuario(texto);
+            input.value = "";
+
+            setTimeout(() => {
+                insertarMensajeBot("Gracias por tu consulta. Para darte una orientación exacta sobre vivienda y arriendos, te recomiendo completar el <strong>Asistente de Clasificación Habitacional Web</strong> en la parte central del portal.");
+            }, 800);
+        }
+
+        function insertarMensajeUsuario(texto) {
+            const history = document.getElementById('chat-mensajes');
+            const div = document.createElement('div');
+            div.className = "flex gap-2 justify-end max-w-[85%] ml-auto";
+            div.innerHTML = `
+                <div class="bg-brand-dark text-white p-2.5 rounded-lg shadow-sm border text-slate-700">
+                    <p class="leading-relaxed">${texto}</p>
+                </div>
+            `;
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function insertarMensajeBot(textoHTML) {
+            const history = document.getElementById('chat-mensajes');
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-start max-w-[85%]";
+            div.innerHTML = `
+                <div class="bg-brand-teal text-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-[10px]" aria-hidden="true">MR</div>
+                <div class="bg-white p-2.5 rounded-lg shadow-sm border border-slate-100 text-slate-700">
+                    <p class="leading-relaxed">${textoHTML}</p>
+                </div>
+            `;
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+        }
+    </script>
+</body>
+</html>
